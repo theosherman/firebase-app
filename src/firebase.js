@@ -1,6 +1,6 @@
 import firebase from '@firebase/app'
 import '@firebase/auth'
-import { set } from 'vuex-pathify'
+import store from '@/store'
 
 const config = {
   apiKey: "AIzaSyDmH_W-pqxk4K1SOVeUtYHvxOFk_wq5yI4",
@@ -14,6 +14,5 @@ const config = {
 firebase.initializeApp(config)
 
 firebase.auth().onAuthStateChanged(user => {
-  // set('user', user)
-  console.log(user)
+  store.set('user', user)
 })
