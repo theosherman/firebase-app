@@ -1,8 +1,8 @@
 <template lang="pug">
 v-content
-  v-container(fluid fill-height)
+  v-container(fill-height)
     v-layout(align-center justify-center)
-      v-flex(sm12 md6)
+      v-flex(md10 lg8 xl6)
         v-card.elevation-12
           v-card-text
             v-alert(:value='!!errorMessage' color='error' icon='fa-exclamation-circle' transition="scale-transition" style='margin-bottom: 20px;') {{ errorMessage }}
@@ -15,9 +15,9 @@ v-content
                     v-card-title
                       h3 Login with other methods
                     v-card-text
-                      v-btn(dark block round large color='red') Login with Google
-                      v-btn(dark block round large color='primary') Login with Facebook
-                      v-btn(dark block round large color='secondary') Login with SMS Text
+                      v-btn(dark block round large color='red' @click='signInWithGoogle()') Google
+                      v-btn(dark block round large color='primary') Facebook
+                      v-btn(dark block round large color='secondary') SMS Text
 
                 v-flex(md6)
                   v-card.elevation-0
@@ -46,19 +46,30 @@ export default {
   methods: {
     login() {
       firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-        .then(() => { this.$router.push('/') })
         .catch(error => { this.errorMessage = error.message })
     },
     register() {
       firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-        .then(() => { this.$router.push('/') })
         .catch(error => { this.errorMessage = error.message })
+    },
+    signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      firebase.auth().signInWithRedirect(provider)
     }
   },
   created() {
     if (!!this.$store.get('user')) {
       this.$router.push('/account')
     }
+
+    if (!this.$store.get('alreadyRedirected')) {
+      firebase.auth().getRedirectResult().then(result => {
+        if (!!result.user) {
+          this.$store.set('alreadyRedirected', true)
+        }
+      }).catch(console.error)
+    }
+    
   }
 }
 </script>
