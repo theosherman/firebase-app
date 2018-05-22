@@ -1,5 +1,5 @@
-import firebase from '@firebase/app'
-import '@firebase/auth'
+import firebase from 'firebase/app'
+import firebaseui from 'firebaseui'
 import store from '@/store'
 
 const config = {
@@ -16,3 +16,5 @@ firebase.initializeApp(config)
 firebase.auth().onAuthStateChanged(user => {
   store.set('user', user)
 })
+
+export const ui = new firebaseui.auth.AuthUI(firebase.auth())

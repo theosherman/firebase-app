@@ -8,6 +8,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 import '@/firebase'
+import 'firebaseui/dist/firebaseui.css'
 
 Vue.use(Vuetify)
 
